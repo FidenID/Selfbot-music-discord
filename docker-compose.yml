@@ -1,0 +1,9 @@
+services:
+  bot:
+    build: .
+    container_name: bot-dc-v2
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./cookies.txt:/app/cookies.txt:ro
