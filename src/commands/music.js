@@ -2,19 +2,42 @@ const { createAudioResource } = require("@discordjs/voice")
 const { cfg } = require("../config")
 const { reply } = require("../reply")
 const { log } = require("../logger")
-const { isUrl, isTikTok, isSoundCloud, isYouTubePlaylist, isYouTube, formatDuration, parseTimeToSeconds, progressBar } = require("../utils/format")
+const { isUrl, isTikTok, isSoundCloud, isSpotify, isYouTubePlaylist, isYouTube, formatDuration, parseTimeToSeconds, progressBar } = require("../utils/format")
 const { searchYouTube, getVideoInfo, getPlaylistVideos } = require("../services/youtube")
 const { getTikTokTitle } = require("../services/tiktok")
 const { getSoundCloudInfo } = require("../services/soundcloud")
+const { getSpotifyInfo } = require("../services/spotify")
 const { getLyrics } = require("../services/lyrics")
 const { ensureQueue } = require("../voice/connect")
 const { saveState } = require("../voice/queue")
 const { playSong } = require("../voice/play")
 const { createStream, killProcesses } = require("../voice/stream")
 
+async function searchYTtoSong(searchQuery) {
+    const r = await searchYouTube(searchQuery)
+    const v = r.videos?.[0]
+    if (!v) throw new Error(`Tidak ketemu di YouTube: ${searchQuery}`)
+    return { title: v.title, url: v.url, duration: v.seconds }
+}
+
 async function resolveSong(query) {
     // returns array of { title, url, duration }
     if (isUrl(query)) {
+        if (isSpotify(query)) {
+            const info = await getSpotifyInfo(query)
+            if (info.kind === "track") {
+                const yt = await searchYTtoSong(info.query)
+                if (yt.duration > cfg.maxSongDuration) throw new Error(`Lagu terlalu panjang (maks ${cfg.maxSongDuration / 60} menit)`)
+                return [yt]
+            }
+            // playlist / album: convert tiap track ke pencarian YouTube (lazy: judul + artis sebagai query, resolusi YT terjadi saat play)
+            const songs = info.tracks.map(t => ({
+                title: `${t.title}${t.artist ? " - " + t.artist : ""}`,
+                url: `ytsearch1:${t.query}`,
+                duration: null
+            }))
+            return songs
+        }
         if (isTikTok(query)) {
             const title = await getTikTokTitle(query)
             return [{ title, url: query, duration: null }]
@@ -52,7 +75,7 @@ const cmds = []
 
 cmds.push({
     names: ["p", "play"],
-    description: "Putar lagu (judul/URL YouTube/TikTok/SoundCloud/playlist)",
+    description: "Putar lagu (judul/URL YouTube/TikTok/SoundCloud/Spotify/playlist)",
     async run(ctx) {
         const { msg, query, voice, targetGuild } = ctx
         if (!voice) return reply(msg, "❌ Masuk ke VC dulu di server.")

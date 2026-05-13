@@ -87,7 +87,6 @@ module.exports = [{
 \`${p}history [clear]\`
 
 **🛠️ Utility:**
-\`${p}afk [pesan|off]\` — auto-reply DM saat kamu di-mention
 \`${p}remind <30m|HH:MM> <pesan>\` \`${p}reminders\` \`${p}delremind <id>\`
 \`${p}weather <kota>\` \`${p}tr <bahasa> <teks>\`
 \`${p}status\` \`${p}ping\` \`${p}uptime\` \`${p}clear [n]\` \`${p}joinlink <kode>\`

@@ -37,6 +37,8 @@ function isTikTok(url) { return /tiktok\.com/.test(url) }
 
 function isSoundCloud(url) { return /soundcloud\.com/.test(url) }
 
+function isSpotify(url) { return /(?:open\.)?spotify\.com\/(?:intl-[a-z]+\/)?(track|playlist|album)\//i.test(url) }
+
 function isYouTubePlaylist(url) {
     return isYouTube(url) && url.includes("list=")
 }
@@ -60,6 +62,6 @@ function parseTimeToSeconds(input) {
 
 module.exports = {
     formatDuration, formatUptime, progressBar,
-    isUrl, isYouTube, isTikTok, isSoundCloud, isYouTubePlaylist,
+    isUrl, isYouTube, isTikTok, isSoundCloud, isSpotify, isYouTubePlaylist,
     extractYouTubeId, parseTimeToSeconds
 }

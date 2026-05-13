@@ -8,9 +8,7 @@ const { registry } = require("./commands")
 const { queues, createQueue, saveState, loadState } = require("./voice/queue")
 const { playSong, playRadio } = require("./voice/play")
 const { killProcesses } = require("./voice/stream")
-const afk = require("./state/afk")
 const reminders = require("./state/reminders")
-const { sleep, rand } = require("./stealth")
 require("./state/runtime") // init startTime early
 
 const client = new Client()
@@ -89,46 +87,9 @@ process.on("unhandledRejection", err => log("error", "UnhandledRejection:", err?
 process.on("uncaughtException", err => log("error", "UncaughtException:", err?.message || err))
 
 // =========================================================
-// AFK auto-reply listener
-// =========================================================
-async function handleAfkReply(msg) {
-    if (msg.author.id === client.user.id) return false
-    if (!afk.isAfk()) return false
-    // hanya reply jika user kita di-mention atau pesan di DM
-    const mentioned = msg.mentions?.users?.has(client.user.id)
-    const isDM = !msg.guild
-    if (!mentioned && !isDM) return false
-    if (!afk.shouldReply(msg.author.id)) return false
-
-    if (cfg.stealth) await sleep(rand(800, 2200))
-    try {
-        const target = isDM ? msg.channel : await msg.author.createDM()
-        const sinceMin = Math.floor((Date.now() - afk.getSince()) / 60000)
-        await target.send(`💤 ${afk.getMessage()}\n*(AFK ${sinceMin}m yang lalu)*`)
-    } catch {}
-    return true
-}
-
-// =========================================================
 // Command dispatcher
 // =========================================================
 client.on("messageCreate", async msg => {
-    // Auto-clear AFK saat owner sendiri kirim pesan (non-command)
-    if (msg.author.id === client.user.id) {
-        if (afk.isAfk() && !msg.content.startsWith(cfg.prefix + "afk")) {
-            const { wasActive, mentions } = afk.clearAfk()
-            if (wasActive) {
-                try {
-                    const dm = await msg.author.createDM()
-                    await dm.send(`✅ AFK off. Kamu menerima **${mentions}** mention.`)
-                } catch {}
-            }
-        }
-    }
-
-    // AFK auto-reply (untuk user lain)
-    await handleAfkReply(msg)
-
     if (!msg.content.startsWith(cfg.prefix)) return
     // hanya owner (msg dari akun sendiri) ATAU whitelisted users
     const isSelf = msg.author.id === client.user.id

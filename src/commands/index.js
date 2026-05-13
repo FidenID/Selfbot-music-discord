@@ -5,7 +5,6 @@ const modules = [
     require("./radio"),
     require("./voiceCmds"),
     require("./playlist"),
-    require("./afk"),
     require("./remind"),
     require("./weather"),
     require("./translate"),
