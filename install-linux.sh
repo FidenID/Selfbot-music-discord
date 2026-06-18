@@ -10,6 +10,13 @@ if [ "$EUID" -eq 0 ]; then
    exit 1
 fi
 
+# Install build-essential (required for native modules)
+echo ""
+echo "📦 Installing build-essential..."
+sudo apt update
+sudo apt install -y build-essential python3
+echo "✅ build-essential installed"
+
 # Install NVM and Node.js 22
 echo ""
 echo "📦 Installing NVM and Node.js 22..."
@@ -33,7 +40,6 @@ echo "📦 Installing ffmpeg..."
 if command -v ffmpeg &> /dev/null; then
     echo "✅ ffmpeg already installed"
 else
-    sudo apt update
     sudo apt install -y ffmpeg
     echo "✅ ffmpeg installed"
 fi
@@ -49,7 +55,7 @@ else
     echo "✅ yt-dlp installed"
 fi
 
-# Install Deno (JavaScript runtime for yt-dlp)
+# Install Deno
 echo ""
 echo "📦 Installing Deno..."
 if command -v deno &> /dev/null; then
@@ -59,7 +65,6 @@ else
     export DENO_INSTALL="$HOME/.deno"
     export PATH="$DENO_INSTALL/bin:$PATH"
     
-    # Add to bashrc if not already there
     if ! grep -q 'DENO_INSTALL' "$HOME/.bashrc"; then
         echo 'export DENO_INSTALL="$HOME/.deno"' >> "$HOME/.bashrc"
         echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >> "$HOME/.bashrc"
@@ -73,7 +78,7 @@ echo "📦 Installing Node.js dependencies..."
 npm install
 echo "✅ Dependencies installed"
 
-# Install PM2 globally
+# Install PM2
 echo ""
 echo "📦 Installing PM2..."
 if command -v pm2 &> /dev/null; then
@@ -87,13 +92,13 @@ fi
 echo ""
 if [ ! -f .env ]; then
     echo "📝 Creating .env file..."
-    cat > .env << 'EOF'
+    cat > .env << 'ENVEOF'
 DISCORD_TOKEN=your_token_here
 DISCORD_PREFIX=?
 ALLOWED_USERS=
 STEALTH=true
 REPLY_DM=true
-EOF
+ENVEOF
     echo "✅ .env created - Please edit it with your Discord token"
 else
     echo "✅ .env already exists"
