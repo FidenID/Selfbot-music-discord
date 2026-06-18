@@ -36,14 +36,29 @@ module.exports = [{
     names: ["clear"], description: "Hapus pesan bot sendiri",
     async run({ msg, args }) {
         if (!msg.guild) return reply(msg, "❌ Hanya di server.")
-        const amount = Math.min(parseInt(args[0]) || 10, 100)
-        const messages = await msg.channel.messages.fetch({ limit: amount })
-        const mine = messages.filter(m => m.author.id === msg.client.user.id)
-        for (const m of mine.values()) { try { await m.delete() } catch {} }
         try {
-            const c = await msg.channel.send(`🗑️ Hapus **${mine.size}** pesan`)
-            setTimeout(() => c.delete().catch(() => {}), 2500)
-        } catch {}
+            const amount = Math.min(parseInt(args[0]) || 10, 100)
+            const messages = await msg.channel.messages.fetch({ limit: amount }).catch(() => new Map())
+            if (messages.size === 0) return reply(msg, "❌ Gagal fetch messages, coba lagi")
+            const mine = messages.filter(m => m.author.id === msg.client.user.id)
+            if (mine.size === 0) return reply(msg, "ℹ️ Tidak ada pesan untuk dihapus")
+            
+            let deleted = 0
+            for (const m of mine.values()) { 
+                try { 
+                    await m.delete()
+                    deleted++
+                    await new Promise(r => setTimeout(r, 500))
+                } catch (e) {
+                    console.error('[clear]', e.message)
+                }
+            }
+            const c = await msg.channel.send(`🗑️ Hapus **${deleted}** pesan`).catch(() => null)
+            if (c) setTimeout(() => c.delete().catch(() => {}), 3000)
+        } catch (err) {
+            console.error('[clear]', err)
+            reply(msg, "❌ " + err.message)
+        }
     }
 }, {
     names: ["joinlink"], description: "Join server lewat invite",
