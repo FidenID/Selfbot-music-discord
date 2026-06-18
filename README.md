@@ -45,62 +45,108 @@ Selfbot Discord pribadi dengan musik, radio, AFK, reminder, weather, translate, 
 
 ## 📦 Instalasi
 
-### 1. Clone & masuk folder
+> ⚠️ **Requirements:** Node.js v22+ (akan diinstall otomatis oleh script)
+
+### Metode 1: Automatic Installation (Recommended)
+
+#### Linux (Ubuntu/Debian)
 ```bash
 git clone <repo> bot-dc-v2
 cd bot-dc-v2
+chmod +x install-linux.sh
+./install-linux.sh
 ```
 
-### 2. Install dependencies
+#### macOS
+```bash
+git clone <repo> bot-dc-v2
+cd bot-dc-v2
+chmod +x install-macos.sh
+./install-macos.sh
+```
+
+#### Windows
+```powershell
+git clone <repo> bot-dc-v2
+cd bot-dc-v2
+# Run PowerShell as Administrator
+.\install-windows.ps1
+```
+
+Script akan otomatis install:
+- **NVM** dan **Node.js 22**
+- **ffmpeg** (audio processing)
+- **yt-dlp** (download dari YouTube/TikTok/SoundCloud)
+- **Deno** (JavaScript runtime untuk yt-dlp)
+- **PM2** (process manager)
+- **Dependencies Node.js**
+
+### Metode 2: Manual Installation
+
+#### 1. Install Node.js 22 via NVM
+```bash
+# Linux/macOS
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc  # atau ~/.zshrc untuk macOS
+nvm install 22
+nvm use 22
+
+# Windows: Download NVM for Windows dari https://github.com/coreybutler/nvm-windows
+```
+
+#### 2. Install dependencies sistem
+```bash
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install -y ffmpeg
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+sudo chmod +x /usr/local/bin/yt-dlp
+curl -fsSL https://deno.land/install.sh | sh
+
+# macOS
+brew install ffmpeg yt-dlp deno
+
+# Windows (via Chocolatey, run as Administrator)
+choco install ffmpeg yt-dlp deno -y
+```
+
+#### 3. Install Node.js dependencies
 ```bash
 npm install
 ```
 
-### 3. Install `yt-dlp` dan `ffmpeg`
+#### 4. Setup `.env`
 ```bash
-# Linux
-sudo apt install ffmpeg
-sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
-sudo chmod +x /usr/local/bin/yt-dlp
-```
-
-### 4. Setup `.env`
-```bash
-cp .env.example .env
-nano .env
+nano .env  # atau notepad .env di Windows
 ```
 Isi minimal:
 ```env
 DISCORD_TOKEN=token_kamu_di_sini
 DISCORD_PREFIX=?
-ALLOWED_USERS=        # kosongkan = hanya akun sendiri
+ALLOWED_USERS=
 STEALTH=true
 REPLY_DM=true
 ```
 
 > 🔑 **Cara dapat token:** Buka Discord di browser → F12 → Network → cari request dengan header `Authorization`. Token bersifat **sangat rahasia**, jangan dibagikan.
 
-### 5. (Opsional) Cookies YouTube
+#### 5. (Opsional) Cookies YouTube
 Untuk bypass bot detection / video age-restricted:
 - Install ekstensi [Get cookies.txt LOCALLY](https://chrome.google.com/webstore/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
 - Login YouTube → export → simpan sebagai `cookies.txt` di root project
 
-### 6. Run
+### Menjalankan Bot
+
+**Development:**
 ```bash
 npm start
 ```
 
-Atau dengan PM2 (recommended):
+**Production (dengan PM2, recommended):**
 ```bash
-npm install -g pm2
-pm2 start src/index.js --name bot-dc-v2
+pm2 start ecosystem.config.js
 pm2 save
-pm2 startup
-```
-
-Atau dengan Docker:
-```bash
-docker-compose up -d
+pm2 startup  # auto-start saat reboot
 ```
 
 ---
