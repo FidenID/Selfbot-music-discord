@@ -1,4 +1,4 @@
-# 🎵 Bot-DC v2 — Powerful Personal Discord Selfbot
+# 🎵 Selfbot Music Discord — Powerful Personal Discord Selfbot
 
 Selfbot Discord pribadi dengan musik, radio, AFK, reminder, weather, translate, audio filter, dan stealth mode.
 
@@ -51,24 +51,24 @@ Selfbot Discord pribadi dengan musik, radio, AFK, reminder, weather, translate, 
 
 #### Linux (Ubuntu/Debian)
 ```bash
-git clone <repo> bot-dc-v2
-cd bot-dc-v2
+git clone https://github.com/FidenID/Selfbot-music-discord.git
+cd Selfbot-music-discord
 chmod +x install-linux.sh
 ./install-linux.sh
 ```
 
 #### macOS
 ```bash
-git clone <repo> bot-dc-v2
-cd bot-dc-v2
+git clone https://github.com/FidenID/Selfbot-music-discord.git
+cd Selfbot-music-discord
 chmod +x install-macos.sh
 ./install-macos.sh
 ```
 
 #### Windows
 ```powershell
-git clone <repo> bot-dc-v2
-cd bot-dc-v2
+git clone https://github.com/FidenID/Selfbot-music-discord.git
+cd Selfbot-music-discord
 # Run PowerShell as Administrator
 .\install-windows.ps1
 ```
@@ -253,7 +253,7 @@ REPLY_DM=true    # false untuk reply di channel
 ## 📁 Struktur
 
 ```
-bot-dc-v2/
+Selfbot-music-discord/
 ├── src/
 │   ├── index.js           # entry point
 │   ├── config.js

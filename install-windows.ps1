@@ -1,7 +1,7 @@
 # Bot-DC v2 - Windows Installation Script
 # Run this script in PowerShell as Administrator
 
-Write-Host "🎵 Bot-DC v2 - Windows Installation Script" -ForegroundColor Cyan
+Write-Host "🎵 Selfbot Music Discord - Windows Installation Script" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 

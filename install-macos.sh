@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🎵 Bot-DC v2 - macOS Installation Script"
+echo "🎵 Selfbot Music Discord - macOS Installation Script"
 echo "========================================"
 
 # Check if running as root

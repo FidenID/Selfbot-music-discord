@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🎵 Bot-DC v2 - Linux Installation Script"
+echo "🎵 Selfbot Music Discord - Linux Installation Script"
 echo "========================================"
 
 # Check if running as root
