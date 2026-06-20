@@ -140,7 +140,9 @@ async function playRadio(guild, radioUrl, radioName) {
 
     const ff = createRadioStream(radioUrl)
     queue.radioFfmpeg = ff
-    const resource = createAudioResource(ff.stdout)
+    const resource = createAudioResource(ff.stdout, { inlineVolume: true })
+    resource.volume.setVolume(queue.volume || 1)
+    queue.currentResource = resource
     queue.player.play(resource)
 
     queue.player.removeAllListeners("error")
