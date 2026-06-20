@@ -130,7 +130,6 @@ DISCORD_TOKEN=token_kamu_di_sini
 DISCORD_PREFIX=?
 ALLOWED_USERS=
 STEALTH=true
-REPLY_DM=true
 ```
 
 > 🔑 **Cara dapat token:** Buka Discord di browser → F12 → Network → cari request dengan header `Authorization`. Token bersifat **sangat rahasia**, jangan dibagikan.
@@ -252,7 +251,6 @@ pm2 startup  # auto-start saat reboot
 Atur via `.env`:
 ```
 STEALTH=true     # false untuk respon instan
-REPLY_DM=true    # false untuk reply di channel
 ```
 
 ---
