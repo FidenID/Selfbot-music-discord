@@ -93,4 +93,13 @@ cmds.push({
     }
 })
 
+cmds.push({
+    names: ["silent"], description: "Toggle notif musik on/off",
+    async run({ msg, queue }) {
+        if (!queue) return reply(msg, "❌ Tidak ada queue aktif.")
+        queue.silent = !queue.silent
+        return reply(msg, queue.silent ? "🔕 Silent ON — notif musik dimatikan" : "🔔 Silent OFF — notif musik aktif")
+    }
+})
+
 module.exports = cmds

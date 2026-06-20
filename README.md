@@ -37,9 +37,14 @@ Selfbot Discord pribadi dengan musik, radio, AFK, reminder, weather, translate, 
 ### 🥷 Stealth
 - Random typing delay sesuai panjang pesan (terlihat seperti mengetik manual)
 - Jitter pada response time
-- Reply default ke DM (tidak nampak di channel)
+- **Reply DM-only** — semua output bot (command, notif musik, lirik, dll) hanya dikirim ke DM, tidak pernah ke channel/server
 - Reaction `✉️` random (tidak selalu)
 - Whitelist ketat (default: hanya akun sendiri)
+
+### 🔕 Silent Mode
+- `?silent` — toggle notif background musik (now playing, autoplay, dll) on/off
+- Berguna saat dengerin lagu berjam-jam agar DM tidak banjir notif
+- State per-queue, reset saat bot restart
 
 ---
 
@@ -179,6 +184,7 @@ pm2 startup  # auto-start saat reboot
 | `?remove <n>` | Hapus #n |
 | `?move <a> <b>` | Pindah posisi |
 | `?jump <n>` | Loncat ke #n |
+| `?silent` | Toggle notif musik background on/off |
 
 ### 🎛️ Filter / Speed
 | Command | Deskripsi |
@@ -237,7 +243,8 @@ pm2 startup  # auto-start saat reboot
 ## 🔒 Keamanan & Stealth
 
 - **Default whitelist ketat:** kalau `ALLOWED_USERS` kosong, hanya akun sendiri yang bisa pakai command. Tidak ada orang lain di server yang bisa trigger.
-- **Reply ke DM:** semua response ke DM kamu, channel tidak penuh dengan respon bot.
+- **Reply DM-only:** semua response (command maupun notif background musik) hanya ke DM kamu, tidak ada satupun pesan yang masuk ke channel/server.
+- **Silent mode (`?silent`):** matikan notif now playing / autoplay saat mau dengerin lagu lama tanpa gangguan DM.
 - **Stealth typing:** delay response sesuai panjang teks (mirip orang ngetik).
 - **Persistence:** state, reminder, playlist, history semua disimpan di `data/` dan dipulihkan setelah restart.
 - **Auto-rejoin VC** kalau ditendang.

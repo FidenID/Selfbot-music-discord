@@ -53,8 +53,7 @@ module.exports = [{
                     console.error('[clear]', e.message)
                 }
             }
-            const c = await msg.channel.send(`🗑️ Hapus **${deleted}** pesan`).catch(() => null)
-            if (c) setTimeout(() => c.delete().catch(() => {}), 3000)
+            await reply(msg, `🗑️ Hapus **${deleted}** pesan`)
         } catch (err) {
             console.error('[clear]', err)
             reply(msg, "❌ " + err.message)

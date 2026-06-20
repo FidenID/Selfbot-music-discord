@@ -92,10 +92,11 @@ cmds.push({
             if (!r.videos?.length) return reply(msg, "❌ Tidak ada hasil!")
             const top = r.videos.slice(0, 4)
             const list = top.map((v, i) => `**${i+1}.** ${v.title} \`[${formatDuration(v.seconds)}]\``).join("\n")
-            await msg.channel.send(`🔍 **${query}**\n\n${list}\n\nBalas **1-4** untuk pilih (30s)`)
+            const dm = await msg.author.createDM()
+            await dm.send(`🔍 **${query}**\n\n${list}\n\nBalas **1-4** untuk pilih (30s)`)
             const filter = m => m.author.id === msg.author.id && ["1","2","3","4"].includes(m.content.trim())
             try {
-                const collected = await msg.channel.awaitMessages({ filter, max: 1, time: 30000, errors: ["time"] })
+                const collected = await dm.awaitMessages({ filter, max: 1, time: 30000, errors: ["time"] })
                 const idx = parseInt(collected.first().content.trim()) - 1
                 const v = top[idx]
                 const queue = ensureQueue(targetGuild, voice, msg.channel, msg.author)
@@ -240,9 +241,7 @@ cmds.push({
                 const chunks = lyrics.match(/[\s\S]{1,1900}/g) || []
                 for (const c of chunks) await dm.send(c)
             } catch {
-                await msg.channel.send(`🎵 **Lirik: ${queue.lastSong.title}**`)
-                const chunks = lyrics.match(/[\s\S]{1,1900}/g) || []
-                for (const c of chunks) await msg.channel.send(c)
+                // DM gagal, abaikan
             }
         } catch (err) {
             reply(msg, "❌ " + err.message)

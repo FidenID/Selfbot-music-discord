@@ -26,7 +26,8 @@ function createQueue(textChannel, connection, player, voiceChannelId) {
         radioStopped: true,
         radioFfmpeg: null,
         radioReconnectAttempts: 0,
-        lastCommandAuthor: null
+        lastCommandAuthor: null,
+        silent: false
     }
 }
 
