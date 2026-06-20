@@ -127,7 +127,7 @@ async function playSong(guild, song) {
     }
 }
 
-async function playRadio(guild, radioUrl, radioName) {
+async function playRadio(guild, radioUrl, radioName, isRetry = false) {
     const queue = queues.get(guild.id)
     if (!queue) return
 
@@ -137,6 +137,7 @@ async function playRadio(guild, radioUrl, radioName) {
     queue.radioStopped = false
     queue.radioUrl = radioUrl
     queue.radioName = radioName
+    if (!isRetry) queue.radioReconnectAttempts = 0
 
     const ff = createRadioStream(radioUrl)
     queue.radioFfmpeg = ff
@@ -158,11 +159,11 @@ async function playRadio(guild, radioUrl, radioName) {
         const delay = Math.min(5000 * Math.pow(2, queue.radioReconnectAttempts - 1), 30000)
         setTimeout(() => {
             const q = queues.get(guild.id)
-            if (q && !q.radioStopped) playRadio(guild, radioUrl, radioName)
+            if (q && !q.radioStopped) playRadio(guild, radioUrl, radioName, true)
         }, delay)
     })
 
-    await notifyDM(queue, `📻 Now playing radio: **${radioName}**`)
+    if (!isRetry) await notifyDM(queue, `📻 Now playing radio: **${radioName}**`)
     saveState()
 
     queue.player.once(AudioPlayerStatus.Idle, () => {
@@ -177,7 +178,7 @@ async function playRadio(guild, radioUrl, radioName) {
         const delay = Math.min(5000 * Math.pow(2, q.radioReconnectAttempts - 1), 30000)
         setTimeout(() => {
             const curr = queues.get(guild.id)
-            if (curr && !curr.radioStopped) playRadio(guild, radioUrl, radioName)
+            if (curr && !curr.radioStopped) playRadio(guild, radioUrl, radioName, true)
         }, delay)
     })
 }

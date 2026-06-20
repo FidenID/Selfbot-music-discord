@@ -98,6 +98,8 @@ function createRadioStream(url) {
         "-reconnect", "1",
         "-reconnect_streamed", "1",
         "-reconnect_delay_max", "5",
+        "-reconnect_on_http_error", "4xx,5xx",
+        "-timeout", "10000000",
         "-i", url,
         "-vn", "-f", "opus",
         "-ar", "48000", "-ac", "2",
