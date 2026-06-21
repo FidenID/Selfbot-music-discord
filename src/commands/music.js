@@ -235,14 +235,10 @@ cmds.push({
         await reply(msg, "🔍 Cari lirik...")
         try {
             const lyrics = await getLyrics(queue.lastSong.title)
-            try {
-                const dm = await msg.author.createDM()
-                await dm.send(`🎵 **Lirik: ${queue.lastSong.title}**`)
-                const chunks = lyrics.match(/[\s\S]{1,1900}/g) || []
-                for (const c of chunks) await dm.send(c)
-            } catch {
-                // DM gagal, abaikan
-            }
+            const dm = await msg.author.createDM()
+            const chunks = lyrics.match(/[\s\S]{1,1900}/g) || []
+            await dm.send(`🎵 **Lirik: ${queue.lastSong.title}**\n\n${chunks[0] || ""}`)
+            for (const c of chunks.slice(1)) await dm.send(c)
         } catch (err) {
             reply(msg, "❌ " + err.message)
         }
