@@ -8,3 +8,5 @@ tmp/
 .DS_Store
 yt-dlp
 yt-dlp.exe
+package-lock.json
+package-lock.json
